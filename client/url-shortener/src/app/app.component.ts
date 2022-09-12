@@ -50,7 +50,11 @@ export class AppComponent implements OnInit {
           .createShortUrl(this.shortenerForm.value.inputLongUrl!)
           .subscribe((res) => {
             this.shortenerForm.patchValue({
-              outputShortUrl: environment.endpoint + '/' + res.ShortUrl,
+              outputShortUrl:
+                environment.endpoint +
+                Constants.URL_MAP_PATH +
+                '/' +
+                res.ShortUrl,
             });
             this.isLoading = false;
             this.alertService
