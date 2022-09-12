@@ -16,7 +16,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
+    "devstart": "nodemon server.js",
     "test": "jest"
   },
   "author": "",
