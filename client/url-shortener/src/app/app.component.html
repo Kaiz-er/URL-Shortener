@@ -1,0 +1,88 @@
+<tui-root>
+  <div class="container">
+    <div class="tui-row">
+      <div class="tui-col_2"></div>
+      <div class="tui-col_8 vertical-center">
+        <tui-island size="l" textAlign="center" class="island">
+          <div class="tui-island__content">
+            <tui-loader
+              [showLoader]="this.isLoading"
+              [inheritColor]="true"
+              [overlay]="true"
+            >
+              <figure class="tui-island__figure">
+                <div class="some-figure"></div>
+              </figure>
+              <div>
+                <h3 class="tui-island__title">Shorten your URL</h3>
+                <p class="tui-island__paragraph">
+                  Generate a unique short URL!
+                </p>
+                <form class="b-form" [formGroup]="shortenerForm">
+                  <tui-input
+                    formControlName="inputLongUrl"
+                    [readOnly]="
+                      this.shortenerForm.controls['outputShortUrl'].value != ''
+                    "
+                  >
+                    Long URL&nbsp;
+                    <input tuiTextfield />
+                  </tui-input>
+                  <tui-input-copy
+                    *ngIf="
+                      this.shortenerForm.controls['outputShortUrl'].value != ''
+                    "
+                    [readOnly]="true"
+                    class="outputUrlTextBox"
+                    formControlName="outputShortUrl"
+                    #outputShortUrl
+                    >Short URL</tui-input-copy
+                  >
+                </form>
+                <div class="tui-island__footer-button">
+                  <div class="tui-row-adaptive">
+                    <button
+                      tuiButton
+                      type="button"
+                      appearance="flat"
+                      size="l"
+                      [ngClass]="
+                        this.shortenerForm.controls['outputShortUrl'].value ==
+                        ''
+                          ? 'tui-col_12'
+                          : 'tui-col_md-6 tui-col_s-12'
+                      "
+                      (click)="onShortenButtonClicked()"
+                    >
+                      {{
+                        this.shortenerForm.controls["outputShortUrl"].value ==
+                        ""
+                          ? "Shorten"
+                          : "Shorten another"
+                      }}
+                    </button>
+                    <button
+                      tuiButton
+                      type="button"
+                      appearance="flat"
+                      size="l"
+                      class="tui-col_md-6 tui-col_s-12"
+                      (click)="onCopyButtonClicked()"
+                      *ngIf="
+                        this.shortenerForm.controls['outputShortUrl'].value !=
+                        ''
+                      "
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </tui-loader>
+          </div>
+        </tui-island>
+      </div>
+      <div class="tui-col_2"></div>
+    </div>
+  </div>
+</tui-root>
