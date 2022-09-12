@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import * as Constants from '../helpers/constants';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,6 @@ export class ShortenerService {
     const req = {
       url: longUrl,
     };
-    return this.http.post(Constants.ROOT_URL + Constants.URL_MAP_PATH, req);
+    return this.http.post(environment.endpoint + Constants.URL_MAP_PATH, req);
   }
 }

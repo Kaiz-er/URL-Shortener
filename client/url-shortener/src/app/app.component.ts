@@ -1,9 +1,6 @@
-import {
-  Component,
-  OnInit,
-  Inject,
-} from '@angular/core';
+import { Component, OnInit, Inject, isDevMode } from '@angular/core';
 import {} from '@angular/core';
+import { environment } from '../environments/environment';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ShortenerService } from './services/shortener.service';
 import * as Constants from './helpers/constants';
@@ -21,7 +18,10 @@ export class AppComponent implements OnInit {
     private readonly alertService: TuiAlertService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (isDevMode()) {
+    }
+  }
 
   outputUrl = '';
   isLoading = false;
@@ -33,6 +33,8 @@ export class AppComponent implements OnInit {
     ]),
     outputShortUrl: new FormControl(''),
   });
+
+  getEndpoint() {}
 
   onShortenButtonClicked() {
     if (this.shortenerForm.value.outputShortUrl!) {
@@ -48,7 +50,7 @@ export class AppComponent implements OnInit {
           .createShortUrl(this.shortenerForm.value.inputLongUrl!)
           .subscribe((res) => {
             this.shortenerForm.patchValue({
-              outputShortUrl: Constants.ROOT_URL + '/' + res.ShortUrl,
+              outputShortUrl: environment.endpoint + '/' + res.ShortUrl,
             });
             this.isLoading = false;
             this.alertService
