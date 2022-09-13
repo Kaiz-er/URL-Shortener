@@ -8,7 +8,7 @@
 
 `cd client/url-shortener` \
 `npm install` \
-`ng server`
+`ng serve`
 
 ## Backend
 
