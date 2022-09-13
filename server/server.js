@@ -10,6 +10,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use((error, request, response, next) => {
+  console.log(`Error: ${error.message}`);
+  response.status(error.status).send(error.message);
+});
+
 app.use("/urlmap", router.urlmap);
 
 (async () => {

@@ -18,10 +18,7 @@ export class AppComponent implements OnInit {
     private readonly alertService: TuiAlertService
   ) {}
 
-  ngOnInit(): void {
-    if (isDevMode()) {
-    }
-  }
+  ngOnInit(): void {}
 
   outputUrl = '';
   isLoading = false;
@@ -34,8 +31,6 @@ export class AppComponent implements OnInit {
     outputShortUrl: new FormControl(''),
   });
 
-  getEndpoint() {}
-
   onShortenButtonClicked() {
     if (this.shortenerForm.value.outputShortUrl!) {
       this.shortenerForm.patchValue({
@@ -43,45 +38,46 @@ export class AppComponent implements OnInit {
         outputShortUrl: '',
       });
     } else {
-      console.log(this.shortenerForm.value.inputLongUrl!);
       if (this.shortenerForm.valid) {
         this.isLoading = true;
         this.shortenerService
           .createShortUrl(this.shortenerForm.value.inputLongUrl!)
-          .subscribe((res) => {
-            this.shortenerForm.patchValue({
-              outputShortUrl:
-                environment.endpoint +
-                Constants.URL_MAP_PATH +
-                '/' +
-                res.ShortUrl,
-            });
-            this.isLoading = false;
-            this.alertService
-              .open('Short URL generated!', {
-                status: TuiNotification.Success,
-              })
-              .subscribe();
+          .subscribe({
+            next: (res) => {
+              this.shortenerForm.patchValue({
+                outputShortUrl:
+                  environment.endpoint +
+                  Constants.URL_MAP_PATH +
+                  '/' +
+                  res.ShortUrl,
+              });
+              this.sendAlert('Short URL generated!', TuiNotification.Success);
+              this.isLoading = false;
+            },
+            error: (e) => {
+              this.sendAlert('Something went wrong!', TuiNotification.Error);
+              this.isLoading = false;
+            },
           });
       } else {
-        this.alertService
-          .open('Long URL invalid!', {
-            status: TuiNotification.Error,
-          })
-          .subscribe();
+        this.sendAlert('Long URL invalid!', TuiNotification.Error);
       }
     }
+  }
+
+  sendAlert(message: string, error: TuiNotification) {
+    this.alertService
+      .open(message, {
+        status: error,
+      })
+      .subscribe();
   }
 
   onCopyButtonClicked() {
     navigator['clipboard']
       .writeText(this.shortenerForm.value.outputShortUrl!)
       .then(() => {
-        this.alertService
-          .open('Short URL copied to clipboard!', {
-            status: TuiNotification.Info,
-          })
-          .subscribe();
+        this.sendAlert('Short URL copied to clipboard!', TuiNotification.Info);
       })
       .catch((e) => console.error(e));
   }
