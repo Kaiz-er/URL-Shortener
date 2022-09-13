@@ -64,9 +64,11 @@ isUri: https://www.npmjs.com/package/isuri
 ## Tests (Jest)
 
 1. Backend test for Case 'Short URLs should be unique'
-   > server/tests/urlmap.test.js
+   > server/tests/urlmap.test.js \
+   > Run `npm test` in /server
 2. Frontend test for 'createShortUrl should return non-null response'
-   > client/url-shortener/src/app/services/shortener.service.ts
+   > client/url-shortener/src/app/services/shortener.service.ts \
+   > Run `ng test` in /client/url-shortener
 
 ## Additional Info
 
