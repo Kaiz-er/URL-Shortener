@@ -51,13 +51,14 @@ DotEnv: https://www.npmjs.com/package/dotenv \
 Express: http://expressjs.com/ \
 Express CORS: https://expressjs.com/en/resources/middleware/cors.html \
 Sequelize: https://sequelize.org/ \
-Jest: https://www.npmjs.com/package/jest
+Jest: https://www.npmjs.com/package/jest \
+isUri: https://www.npmjs.com/package/isuri
 
 ## Features
 
 1. Generates a unique short URL for a given long URL
 2. Copy button appears after generation
-3. Regex validation to validate long URL input
+3. Validation to validate long URL input
 4. Relevant notifications for copy or invalid operations
 
 ## Tests (Jest)

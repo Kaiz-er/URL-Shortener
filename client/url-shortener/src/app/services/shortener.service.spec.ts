@@ -22,7 +22,7 @@ describe('shortenerService', () => {
 
   it('createShortUrl should return non-null response', () => {
     const service: ShortenerService = TestBed.get(ShortenerService);
-    let longUrl = 'www.google.com';
+    let longUrl = 'https://www.google.com';
     let res = null;
     service.createShortUrl(longUrl).subscribe((resp) => {
       res = resp;

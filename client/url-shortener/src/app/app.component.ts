@@ -24,10 +24,7 @@ export class AppComponent implements OnInit {
   isLoading = false;
 
   readonly shortenerForm = new FormGroup({
-    inputLongUrl: new FormControl(``, [
-      Validators.required,
-      Validators.pattern(Constants.URL_REGEX),
-    ]),
+    inputLongUrl: new FormControl(``, [Validators.required]),
     outputShortUrl: new FormControl(''),
   });
 
@@ -40,26 +37,36 @@ export class AppComponent implements OnInit {
     } else {
       if (this.shortenerForm.valid) {
         this.isLoading = true;
-        this.shortenerService
-          .createShortUrl(this.shortenerForm.value.inputLongUrl!)
-          .subscribe({
-            next: (res) => {
-              this.shortenerForm.patchValue({
-                outputShortUrl:
-                  environment.endpoint +
-                  Constants.URL_MAP_PATH +
-                  '/' +
-                  res.ShortUrl,
-              });
-              this.sendAlert('Short URL generated!', TuiNotification.Success);
-              this.isLoading = false;
-            },
-            error: (e) => {
-              this.sendAlert('Something went wrong!', TuiNotification.Error);
-              this.isLoading = false;
-            },
-          });
+        let longUrl = this.shortenerForm.value.inputLongUrl!;
+        const pattern = /^((http|https):\/\/)/;
+
+        // Add http header prefix if does not exist
+        if (!pattern.test(longUrl)) {
+          longUrl = 'http://' + longUrl;
+        }
+
+        this.shortenerService.createShortUrl(longUrl).subscribe({
+          next: (res) => {
+            this.shortenerForm.patchValue({
+              outputShortUrl:
+                environment.endpoint +
+                Constants.URL_MAP_PATH +
+                '/' +
+                res.ShortUrl,
+            });
+            this.sendAlert('Short URL generated!', TuiNotification.Success);
+            this.isLoading = false;
+          },
+          error: (e) => {
+            let errorMsg =
+              e.status == 400 ? 'Invalid input!' : 'Something went wrong!';
+            this.sendAlert(errorMsg, TuiNotification.Error);
+            this.isLoading = false;
+          },
+        });
       } else {
+        console.log('hi');
+        console.log(this.shortenerForm.value.inputLongUrl);
         this.sendAlert('Long URL invalid!', TuiNotification.Error);
       }
     }

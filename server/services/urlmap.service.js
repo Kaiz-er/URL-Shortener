@@ -1,25 +1,21 @@
 const UrlMap = require("../models/urlmap");
 const base62 = require("base62/lib/ascii");
-const { response } = require("express");
+const isUri = require("isuri");
 
 module.exports = { generateShortUrl, getUrl };
 
 let counter = null;
 const additionalIncrement = 100000000000;
 
-async function generateShortUrl(bodyObj) {
-  if (!bodyObj || !bodyObj.url) {
+async function generateShortUrl(bodyObj, response) {
+  let longUrl = bodyObj.url;
+
+  if (!bodyObj || !bodyObj.url || !isUri.isValid(longUrl)) {
+    console.log(response);
     return response.status(400).send("Invalid Request");
   }
   const counterToEncode = await getCounter();
   const shortUrl = base62.encode(counterToEncode);
-  const pattern = /^((http|https):\/\/)/;
-  let longUrl = bodyObj.url;
-
-  // Add http header prefix if does not exist
-  if (!pattern.test(longUrl)) {
-    longUrl = "http://" + longUrl;
-  }
 
   const NEW_URLMAP = {
     LongUrl: longUrl,
@@ -38,7 +34,7 @@ async function getCounter() {
   return counter;
 }
 
-async function getUrl(params) {
+async function getUrl(params, response) {
   if (!params || !params.code) {
     return response.status(400).send("Invalid Request");
   }
@@ -46,6 +42,6 @@ async function getUrl(params) {
   if (url) {
     return url.LongUrl;
   } else {
-    return response.status(400).send("Invalid Url");
+    return response.status(404).send("Url Not Found");
   }
 }
